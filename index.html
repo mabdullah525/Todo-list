@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>To Do List</title>
+</head>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f3f4f6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px;
+    }
+
+    h1 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        color: #333;
+
+    }
+
+    #taskInput {
+        padding: 10px;
+        width: 250px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+
+    button {
+        padding: 10px 15px;
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-top: 15px;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #2563eb;
+    }
+
+    #taskList {
+        list-style: none;
+        padding: 0;
+        width: 100%;
+        max-width: 400px;
+        margin-top: 30px;
+    }
+
+    #taskList li {
+        background-color: white;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #taskList li span {
+        flex-grow: 1;
+        margin-right: 10px;
+    }
+
+    #taskList li button {
+        background-color: #ef4444;
+        margin-left: 5px;
+    }
+
+    #taskList li button:hover {
+        background-color: #dc2626;
+    }
+
+    #taskList li button:nth-child(3) {
+        background-color: #f59e0b;
+    }
+
+    #taskList li button:nth-child(3):hover {
+        background-color: #d97706;
+    }
+</style>
+
+<body>
+
+
+
+    <h1>Todo List</h1>
+
+    <input type="text" id="taskInput" placeholder="Enter the task">
+    <button onclick="addTask()">Add Task</button>
+    <h2>Task List</h2>
+
+    <ul id="taskList"></ul>
+
+    <script>
+        function addTask() {
+            let taskText = document.getElementById("taskInput").value;
+
+            if (taskText === "") {
+                alert("Please enter the task");
+                return;
+            }
+
+            let li = document.createElement("li");
+
+            let span = document.createElement("span");
+            span.innerText = taskText;
+
+            // Delete button
+            let delBtn = document.createElement("button");
+            delBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            delBtn.onclick = function () {
+                li.remove();
+            };
+
+            // Edit button
+            let editBtn = document.createElement("button");
+            editBtn.innerHTML = '<i class="fas fa-pen"></i>';
+            editBtn.onclick = function () {
+                let newText = prompt("Enter new text");
+                if (newText) {
+                    span.innerText = newText;
+                }
+            };
+
+            li.appendChild(span);
+            li.appendChild(delBtn);
+            li.appendChild(editBtn);
+
+            document.getElementById("taskList").appendChild(li);
+
+
+            document.getElementById("taskInput").value = "";
+        }
+    </script>
+
+</body>
+
+</html>
+
+
+</html>

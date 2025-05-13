@@ -68,12 +68,21 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: baseline;
     }
 
-    #taskList li span {
-        flex-grow: 1;
+    #taskList li input {
+
         margin-right: 10px;
+        padding: 6px;
+        border: 2px solid #ddd;
+
+    }
+
+    #taskList li div {
+
+        flex-grow: 1;
+
     }
 
     #taskList li button {
@@ -85,12 +94,20 @@
         background-color: #dc2626;
     }
 
-    #taskList li button:nth-child(3) {
+    #taskList li button:nth-child(4) {
         background-color: #f59e0b;
     }
 
-    #taskList li button:nth-child(3):hover {
+    #taskList li button:nth-child(4):hover {
         background-color: #d97706;
+    }
+
+    #taskList li button:nth-child(3) {
+        background-color: rgb(44, 156, 44);
+    }
+
+    #taskList li button:nth-child(3):hover {
+        background-color: #267806;
     }
 </style>
 
@@ -102,8 +119,8 @@
 
     <input type="text" id="taskInput" placeholder="Enter the task">
     <button onclick="addTask()">Add Task</button>
-    <h2>Task List</h2>
 
+    <h2>Task List</h2>
     <ul id="taskList"></ul>
 
     <script>
@@ -117,8 +134,26 @@
 
             let li = document.createElement("li");
 
-            let span = document.createElement("span");
-            span.innerText = taskText;
+            // Display div
+            let taskDisplay = document.createElement("div");
+            taskDisplay.innerText = taskText;
+
+            // Editable input
+            let taskInputEdit = document.createElement("input");
+            taskInputEdit.type = "text";
+            taskInputEdit.value = taskText;
+            taskInputEdit.style.display = "none";
+
+            // Tick button
+            let saveBtn = document.createElement("button");
+            saveBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+            saveBtn.style.display = "none";
+            saveBtn.onclick = function () {
+                taskDisplay.innerText = taskInputEdit.value;
+                taskInputEdit.style.display = "none";
+                taskDisplay.style.display = "block";
+                saveBtn.style.display = "none";
+            };
 
             // Delete button
             let delBtn = document.createElement("button");
@@ -131,22 +166,22 @@
             let editBtn = document.createElement("button");
             editBtn.innerHTML = '<i class="fas fa-pen"></i>';
             editBtn.onclick = function () {
-                let newText = prompt("Enter new text");
-                if (newText) {
-                    span.innerText = newText;
-                }
+                taskInputEdit.style.display = "inline";
+                taskDisplay.style.display = "none";
+                saveBtn.style.display = "inline";
             };
 
-            li.appendChild(span);
-            li.appendChild(delBtn);
+            li.appendChild(taskDisplay);
+            li.appendChild(taskInputEdit);
+            li.appendChild(saveBtn);
             li.appendChild(editBtn);
+            li.appendChild(delBtn);
 
             document.getElementById("taskList").appendChild(li);
-
-
             document.getElementById("taskInput").value = "";
         }
     </script>
+
 
 </body>
 

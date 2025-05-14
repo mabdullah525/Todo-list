@@ -119,6 +119,7 @@
 
     <input type="text" id="taskInput" placeholder="Enter the task">
     <button onclick="addTask()">Add Task</button>
+    <p id="errorMsg" style="color: red; font-weight: 500;"></p>
 
     <h2>Task List</h2>
     <ul id="taskList"></ul>
@@ -126,11 +127,20 @@
     <script>
         function addTask() {
             let taskText = document.getElementById("taskInput").value;
+            let errorMsg = document.getElementById("errorMsg");
 
             if (taskText === "") {
-                alert("Please enter the task");
+                errorMsg.innerText = "Please enter the task";
                 return;
             }
+
+            // Validation: Input contains only special characters
+            let onlySpecialChars = /^[^a-zA-Z0-9]+$/;
+            if (onlySpecialChars.test(taskText)) {
+                errorMsg.innerText = "This is not a valid task";
+                return;
+            }
+            errorMsg.innerText = "";
 
             let li = document.createElement("li");
 
@@ -144,6 +154,7 @@
             taskInputEdit.value = taskText;
             taskInputEdit.style.display = "none";
 
+
             // Tick button
             let saveBtn = document.createElement("button");
             saveBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
@@ -153,6 +164,7 @@
                 taskInputEdit.style.display = "none";
                 taskDisplay.style.display = "block";
                 saveBtn.style.display = "none";
+                editBtn.style.display = "inline"; // <-- Edit button wapis show karein
             };
 
             // Delete button
@@ -169,6 +181,7 @@
                 taskInputEdit.style.display = "inline";
                 taskDisplay.style.display = "none";
                 saveBtn.style.display = "inline";
+                editBtn.style.display = "none"; // <-- Edit button hide karein
             };
 
             li.appendChild(taskDisplay);

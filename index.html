@@ -117,16 +117,19 @@
 
     <h1>Todo List</h1>
 
-    <input type="text" id="taskInput" placeholder="Enter the task">
+    <div style="display: flex; flex-direction: column; max-width: 300px;">
+        <input type="text" id="taskInput" placeholder="Enter the task">
+        <p id="errorMsg" style="color: red; font-weight: 500; margin: 5px 0 15px;"></p>
+    </div>
+
     <button onclick="addTask()">Add Task</button>
-    <p id="errorMsg" style="color: red; font-weight: 500;"></p>
 
     <h2>Task List</h2>
-    <ul id="taskList"></ul>
+    <ul id="taskList" style="padding-left: 0;"></ul>
 
     <script>
         function addTask() {
-            let taskText = document.getElementById("taskInput").value;
+            let taskText = document.getElementById("taskInput").value.trim();
             let errorMsg = document.getElementById("errorMsg");
 
             if (taskText === "") {
@@ -134,38 +137,69 @@
                 return;
             }
 
-            // Validation: Input contains only special characters
             let onlySpecialChars = /^[^a-zA-Z0-9]+$/;
             if (onlySpecialChars.test(taskText)) {
                 errorMsg.innerText = "This is not a valid task";
                 return;
             }
+
             errorMsg.innerText = "";
 
             let li = document.createElement("li");
+            li.style.listStyle = "none";
+            li.style.marginBottom = "10px";
 
             // Display div
             let taskDisplay = document.createElement("div");
             taskDisplay.innerText = taskText;
+            taskDisplay.style.marginBottom = "5px";
+
+            // Wrapper for editable input and error message
+            let editWrapper = document.createElement("div");
+            editWrapper.style.display = "flex";
+            editWrapper.style.flexDirection = "column";
 
             // Editable input
             let taskInputEdit = document.createElement("input");
             taskInputEdit.type = "text";
             taskInputEdit.value = taskText;
-            taskInputEdit.style.flexGrow = "1";
             taskInputEdit.style.display = "none";
 
+            // Inline error message below input
+            let editErrorMsg = document.createElement("p");
+            editErrorMsg.style.color = "red";
+            editErrorMsg.style.fontWeight = "500";
+            editErrorMsg.style.margin = "5px 0 0";
+            editErrorMsg.style.display = "none";
 
-            // Tick button
+            // Save button
             let saveBtn = document.createElement("button");
             saveBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
             saveBtn.style.display = "none";
             saveBtn.onclick = function () {
-                taskDisplay.innerText = taskInputEdit.value;
+                let newValue = taskInputEdit.value.trim();
+
+                if (newValue === "") {
+                    editErrorMsg.innerText = "Please enter the task";
+                    editErrorMsg.style.display = "block";
+                    return;
+                }
+
+                if (onlySpecialChars.test(newValue)) {
+                    editErrorMsg.innerText = "This is not a valid task";
+                    editErrorMsg.style.display = "block";
+                    return;
+                }
+
+                // Clear error and update display
+                editErrorMsg.innerText = "";
+                editErrorMsg.style.display = "none";
+
+                taskDisplay.innerText = newValue;
                 taskInputEdit.style.display = "none";
                 taskDisplay.style.display = "block";
                 saveBtn.style.display = "none";
-                editBtn.style.display = "inline"; // <-- Edit button wapis show karein
+                editBtn.style.display = "inline";
             };
 
             // Delete button
@@ -179,14 +213,18 @@
             let editBtn = document.createElement("button");
             editBtn.innerHTML = '<i class="fas fa-pen"></i>';
             editBtn.onclick = function () {
-                taskInputEdit.style.display = "inline";
+                taskInputEdit.style.display = "block";
                 taskDisplay.style.display = "none";
                 saveBtn.style.display = "inline";
-                editBtn.style.display = "none"; // <-- Edit button hide karein
+                editBtn.style.display = "none";
             };
 
+            // Add input and error to wrapper
+            editWrapper.appendChild(taskInputEdit);
+            editWrapper.appendChild(editErrorMsg);
+
             li.appendChild(taskDisplay);
-            li.appendChild(taskInputEdit);
+            li.appendChild(editWrapper);
             li.appendChild(saveBtn);
             li.appendChild(editBtn);
             li.appendChild(delBtn);
@@ -195,6 +233,9 @@
             document.getElementById("taskInput").value = "";
         }
     </script>
+
+
+
 
 
 </body>
